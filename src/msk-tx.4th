@@ -1,5 +1,5 @@
 \ Minimum Shift Keying (MSK) Modulation
-\ REQUIRES: bit-array.4th
+\ REQUIRES: dac.4th delay.4th
 
 
 create sine-table \ 1024 pts, 1023 max amp.
@@ -151,18 +151,15 @@ $100 constant #steps
  ;
 
 : phase-offset ( phase ai -- phase )
-  0= if $200 + then \ FIXME
-  \ swap tuck = if $300 else $500 then \ if ai=aq add 270deg, else add 450deg
+  0= if $200 + then
  ;
 
 : cos@<angle ( angle -- sine-value )
-    $100 + pts/cycle mod cells sine-table + @
+  $100 + pts/cycle mod cells sine-table + @
  ;
 
 
 : spin ( start-offset T dist -- )
-  ( -- start-offset #steps dist #steps )
-  ( -- start-offset #steps step-sz )
   ?do i cos@<angle dac dup us loop drop \ 270deg in 256 steps
  ;
 
@@ -215,7 +212,6 @@ $100 constant #steps
  ;
 
 : message s" Hello, World!" 2dup $F0 fill ;
-\ : >msk2 #bits 0 ?do dup i bit< . dup i 1+ bit< . dup i 2 + bit< . cr loop ;
 : >msk  \ sliding window
   0 \ phase
   message
@@ -224,7 +220,6 @@ $100 constant #steps
     dup i 2bit< 2swap swap 2swap
     i even? if swap then
     swap /bit swap
-    \ i 1 + $8 /mod rot + c@ swap bit< .
   loop 2drop
   0 dac
  ;
