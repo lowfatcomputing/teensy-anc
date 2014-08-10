@@ -1,4 +1,4 @@
-\ Minimum Shift Keying (MSK) Modulation
+\ msk-tx.4th - Minimum Shift Keying (MSK) Modulation
 \ REQUIRES: dac.4th delay.4th
 
 
